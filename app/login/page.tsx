@@ -33,7 +33,7 @@ export default async function LoginPage() {
       <div className="bg-white rounded-2xl shadow-xl p-10 w-full max-w-sm text-center">
         <div className="text-5xl mb-4">😂</div>
         <h1 className="text-2xl font-bold text-slate-800 mb-1">Humor Admin</h1>
-        <p className="text-slate-500 text-sm mb-8">Superadmins only. You know who you are.</p>
+        <p className="text-slate-500 text-sm mb-8">Sign in with Google to access the admin panel.</p>
         <form action={signIn}>
           <button
             type="submit"
