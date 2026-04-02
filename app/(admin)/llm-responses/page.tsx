@@ -1,19 +1,32 @@
 import { createClient } from "@/utils/supabase/server";
+import Link from "next/link";
 
-export default async function LlmResponsesPage() {
+export default async function LlmResponsesPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ page?: string }>;
+}) {
+  const params = await searchParams;
+  const page = parseInt(params.page || "1");
+  const perPage = 25;
+  const from = (page - 1) * perPage;
+  const to = from + perPage - 1;
+
   const supabase = await createClient();
-  const { data: responses, error } = await supabase
+  const { data: responses, error, count } = await supabase
     .from("llm_model_responses")
-    .select("*")
+    .select("*", { count: "exact" })
     .order("created_at", { ascending: false })
-    .limit(50);
+    .range(from, to);
+
+  const totalPages = Math.ceil((count ?? 0) / perPage);
 
   return (
     <div className="p-8">
       <div className="mb-6">
         <h1 className="text-2xl font-bold text-slate-800">LLM Responses</h1>
         <p className="text-slate-500 text-sm mt-1">
-          Showing {responses?.length ?? 0} most recent LLM model responses
+          {count ?? 0} total LLM model responses
         </p>
       </div>
 
@@ -111,6 +124,23 @@ export default async function LlmResponsesPage() {
             )}
           </tbody>
         </table>
+        <div className="flex items-center justify-between px-5 py-4 border-t border-slate-200">
+          <p className="text-sm text-slate-500">
+            Showing {from + 1}–{Math.min(to + 1, count ?? 0)} of {count ?? 0}
+          </p>
+          <div className="flex gap-2">
+            {page > 1 && (
+              <Link href={`?page=${page - 1}`} className="px-3 py-1.5 text-sm bg-white border border-slate-200 rounded-lg hover:bg-slate-50">
+                ← Previous
+              </Link>
+            )}
+            {page < totalPages && (
+              <Link href={`?page=${page + 1}`} className="px-3 py-1.5 text-sm bg-violet-600 text-white rounded-lg hover:bg-violet-700">
+                Next →
+              </Link>
+            )}
+          </div>
+        </div>
       </div>
     </div>
   );
