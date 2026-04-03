@@ -13,6 +13,7 @@ const navGroups = [
       { href: "/users", label: "Users", icon: "👥" },
       { href: "/images", label: "Images", icon: "🖼️" },
       { href: "/captions", label: "Captions", icon: "💬" },
+      { href: "/caption-stats", label: "Caption Stats", icon: "📈" },
       { href: "/caption-requests", label: "Caption Requests", icon: "📨" },
       { href: "/caption-examples", label: "Caption Examples", icon: "📝" },
     ],
